@@ -1,41 +1,30 @@
-# This is a Databricks asset bundle definition for my_project.
-# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
-  name: my_project
+  name: classic_job_demo
 
 include:
-  - resources/*.yml
+  - resources.yml
 
-targets:
-  # The 'dev' target, for development purposes. This target is the default.
-  dev:
-    # We use 'mode: development' to indicate this is a personal development copy:
-    # - Deployed resources get prefixed with '[dev my_user_name]'
-    # - Any job schedules and triggers are paused by default
-    # - The 'development' mode is used for Delta Live Tables pipelines
-    mode: development
+variables:
+  node_type_id:
+    description: The node ID for the cluster creation.
+    default: Standard_DS3_v2
+  spark_version:
+    description: Spark version to be used in the cluster.
+    default: 12.2.x-scala2.12
+
+environments:
+  development:
+    workspace:
+      host: https://adb-984752964297111.11.azuredatabricks.net
     default: true
-    workspace:
-      host: https://adb-984752964297111.11.azuredatabricks.net
 
-  ## Optionally, there could be a 'staging' target here.
-  ## (See Databricks docs on CI/CD at https://docs.databricks.com/dev-tools/bundles/ci-cd.html.)
-  #
-  # staging:
+
+  # qa:
+  #   # This environment is when deploying from a pull request on GitHub.
   #   workspace:
-  #     host: https://adb-984752964297111.11.azuredatabricks.net
+  #     host: 
 
-  # The 'prod' target, used for production deployment.
-  prod:
-    # We use 'mode: production' to indicate this is a production deployment.
-    # Doing so enables strict verification of the settings below.
-    mode: production
+  production:
     workspace:
-      host: https://adb-984752964297111.11.azuredatabricks.net
-      # We always use /Users/shasidhar.eranti@databricks.com for all resources to make sure we only have a single copy.
-      # If this path results in an error, please make sure you have a recent version of the CLI installed.
-      root_path: /Users/shasidhar.eranti@databricks.com/.bundle/${bundle.name}/${bundle.target}
-    run_as:
-      # This runs as shasidhar.eranti@databricks.com in production. We could also use a service principal here,
-      # see https://docs.databricks.com/dev-tools/bundles/permissions.html.
-      user_name: shasidhar.eranti@databricks.com
+      # For demonstration purposes.
+       host: https://adb-984752964297111.11.azuredatabricks.net

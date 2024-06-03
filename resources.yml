@@ -1,0 +1,26 @@
+resources:
+  jobs:
+    ClassicJob:
+      name: "[${bundle.environment}/${workspace.current_user.userName}] Classic Job"
+      job_clusters:
+        - job_cluster_key: Classic_Workflows
+          new_cluster:
+            spark_version: ${var.spark_version}
+            node_type_id: ${var.node_type_id}
+            num_workers: 1 
+      permissions:
+        - level: CAN_VIEW
+          group_name: users
+      format: MULTI_TASK
+      tags:
+        created_by: workflow_demos
+      tasks:
+        - task_key: Load
+          notebook_task:
+            base_parameters:
+              dbname: "Classic_job_${bundle.environment}"
+              commit: "${bundle.git.commit}"
+            notebook_path: ./classic.py
+          job_cluster_key: Classic_Workflows
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
